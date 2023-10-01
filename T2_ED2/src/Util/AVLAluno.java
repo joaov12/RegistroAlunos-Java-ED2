@@ -122,11 +122,10 @@ public class AVLAluno {
     public void editarAluno(int matricula, int faltas, double nota1, double nota2, double nota3) {
         editarAlunoRec(raiz, matricula, faltas, nota1, nota2, nota3);
     }
-
     private void editarAlunoRec(Node node, int matricula, int faltas, double nota1, double nota2, double nota3) {
         if (node == null)
             return;
-
+    
         if (matricula < node.aluno.getMatricula())
             editarAlunoRec(node.esquerda, matricula, faltas, nota1, nota2, nota3);
         else if (matricula > node.aluno.getMatricula())
@@ -137,9 +136,16 @@ public class AVLAluno {
             node.aluno.setNota1(nota1);
             node.aluno.setNota2(nota2);
             node.aluno.setNota3(nota3);
-            node.aluno.calcularMedia(); // Recalcular a média após a edição
+    
+            // Atualizar a média do aluno após a edição
+            node.aluno.setMedia((nota1 * 0.2) + (nota2 * 0.35) + (nota3 * 0.45));
+    
+            // Atualizar a altura do nó após a edição
+            node.altura = 1 + Math.max(altura(node.esquerda), altura(node.direita));
         }
     }
+    
+    
 
     public void removerAluno(int matricula) {
         raiz = removerAlunoRec(raiz, matricula);

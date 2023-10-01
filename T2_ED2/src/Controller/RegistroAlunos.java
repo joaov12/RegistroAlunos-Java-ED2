@@ -56,12 +56,15 @@ public class RegistroAlunos {
                 case 2:
                     System.out.println("Informe a matrícula do aluno:");
                     int matricula = scanner.nextInt();
-                    scanner.nextLine(); // Limpar o buffer de entrada
+                    scanner.nextLine();
+                    if (matricula < 10 || matricula > 99) {
+                        System.out.println("Matrícula fora do intervalo permitido (10-99): " + matricula);
+                        break;
+                    }
 
                     // Verificar se a matrícula já existe na árvore
                     if (tree.verificarMatriculaExistente(matricula)) {
-                        System.out.println(
-                                "Matrícula já existente. Não é permitido inserir um aluno com matrícula duplicada.");
+                        System.out.println("Matrícula já existente. Não é permitido inserir um aluno com matrícula duplicada.");
                     } else {
                         System.out.println("Informe o nome do aluno:");
                         String nome = scanner.nextLine();

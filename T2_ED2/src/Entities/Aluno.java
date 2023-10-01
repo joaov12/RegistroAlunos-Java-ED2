@@ -78,6 +78,11 @@ public class Aluno {
     public double getMedia() {
         return media;
     }
+    
+
+    public void setMedia(double media) {
+        this.media = media;
+    }
 
     @Override
     public String toString() {
