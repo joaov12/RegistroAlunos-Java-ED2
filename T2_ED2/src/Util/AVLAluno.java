@@ -160,44 +160,34 @@ public class AVLAluno {
         else if (matricula > node.aluno.getMatricula())
             node.direita = removerAlunoRec(node.direita, matricula);
         else {
-            // Nó a ser removido com um ou nenhum filho
             if (node.esquerda == null || node.direita == null) {
                 Node temp = null;
                 if (temp == node.esquerda)
                     temp = node.direita;
                 else
                     temp = node.esquerda;
-
-                // Caso sem filho
                 if (temp == null) {
                     temp = node;
                     node = null;
-                } else // Caso com um filho
-                    node = temp; // Copia o conteúdo do nó não vazio
+                } else 
+                    node = temp; 
             } else {
-                // Caso com dois filhos, pegar o sucessor in-order (menor nó da subárvore
-                // direita)
                 Node temp = minNode(node.direita);
 
-                // Copiar o conteúdo do sucessor in-order para este nó
                 node.aluno = temp.aluno;
 
-                // Remover o sucessor in-order
                 node.direita = removerAlunoRec(node.direita, temp.aluno.getMatricula());
             }
         }
-
-        // Se a árvore tinha apenas um nó, então retornar
+        
         if (node == null)
             return node;
 
-        // Atualizar a altura deste nó
         node.altura = 1 + Math.max(altura(node.esquerda), altura(node.direita));
 
-        // Reequilibrar a árvore
         int balance = calcularBalance(node);
 
-        // Casos de rotação
+       
         if (balance > 1 && calcularBalance(node.esquerda) >= 0)
             return rotacaoDireita(node);
 

@@ -113,6 +113,7 @@ public class RegistroAlunos {
                     tree.removerAluno(matriculaRemover);
                     break;
                 case 6:
+                    System.out.println("Dados gravados no arquivo saida.txt");
                     tree.gravarEmOrdem("saida.txt");
                     System.exit(0);
                     break;
