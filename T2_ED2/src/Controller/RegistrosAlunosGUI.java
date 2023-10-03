@@ -20,28 +20,6 @@ public class RegistrosAlunosGUI extends JFrame {
 
     public RegistrosAlunosGUI() {
 
-        
-        try (BufferedReader br = new BufferedReader(new FileReader("T2_ED2\\src\\entrada.txt"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] parts = line.split(" ");
-                if (parts.length == 6) {
-                    int matricula = Integer.parseInt(parts[0]);
-                    String nome = parts[1];
-                    int faltas = Integer.parseInt(parts[2]);
-                    double nota1 = Double.parseDouble(parts[3]);
-                    double nota2 = Double.parseDouble(parts[4]);
-                    double nota3 = Double.parseDouble(parts[5]);
-
-                    Aluno aluno = new Aluno(matricula, nome, faltas, nota1, nota2, nota3);
-                    tree.inserir(aluno);
-                    // System.out.println("Aluno inserido com sucesso: " + aluno.getNome());
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
         tree = new AVLAluno();
         textArea = new JTextArea(20, 40);
         JScrollPane scrollPane = new JScrollPane(textArea);
@@ -54,9 +32,32 @@ public class RegistrosAlunosGUI extends JFrame {
         JButton exitButton = new JButton("Sair");
 
         viewButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            public void actionPerformed(ActionEvent ev) {
                 // Lógica para exibir todos os alunos na JTextArea
                 // Pode usar tree.imprimirEmOrdem() e exibir na JTextArea
+                try (BufferedReader br = new BufferedReader(new FileReader("T2_ED2\\src\\entrada.txt"))) {
+                    String line;
+                    while ((line = br.readLine()) != null) {
+                        String[] parts = line.split(" ");
+                        if (parts.length == 6) {
+                            int matricula = Integer.parseInt(parts[0]);
+                            String nome = parts[1];
+                            int faltas = Integer.parseInt(parts[2]);
+                            double nota1 = Double.parseDouble(parts[3]);
+                            double nota2 = Double.parseDouble(parts[4]);
+                            double nota3 = Double.parseDouble(parts[5]);
+
+                            Aluno aluno = new Aluno(matricula, nome, faltas, nota1, nota2, nota3);
+                            tree.inserir(aluno);
+                            // System.out.println("Aluno inserido com sucesso: " + aluno.getNome());
+                        }
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                
+
             }
         });
 
@@ -87,7 +88,7 @@ public class RegistrosAlunosGUI extends JFrame {
         exitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 tree.gravarEmOrdem("saida.txt");
-               System.exit(0);
+                System.exit(0);
             }
         });
 
