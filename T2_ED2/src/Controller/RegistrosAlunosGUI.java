@@ -24,6 +24,7 @@ public class RegistrosAlunosGUI extends JFrame {
     public RegistrosAlunosGUI() {
 
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         tree = new AVLAluno();
         textArea = new JTextArea(20, 40);
         JScrollPane scrollPane = new JScrollPane(textArea);
@@ -37,8 +38,6 @@ public class RegistrosAlunosGUI extends JFrame {
 
         viewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
-                // Lógica para exibir todos os alunos na JTextArea
-                // Pode usar tree.imprimirEmOrdem() e exibir na JTextArea
                 try (BufferedReader br = new BufferedReader(new FileReader("T2_ED2\\src\\entrada.txt"))) {
                     String line;
                     while ((line = br.readLine()) != null) {
@@ -53,23 +52,16 @@ public class RegistrosAlunosGUI extends JFrame {
 
                             Aluno aluno = new Aluno(matricula, nome, faltas, nota1, nota2, nota3);
                             tree.inserir(aluno);
-                            // System.out.println("Aluno inserido com sucesso: " + aluno.getNome());
                         }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
-                Font font = new Font("SansSerif", Font.PLAIN, 16); // Você pode ajustar o tamanho e o estilo da fonte
-                                                                   // conforme desejado
-
-                // Configure a fonte na JTextArea
+                Font font = new Font("SansSerif", Font.PLAIN, 16); 
                 textArea.setFont(font);
                 textArea.setText("");
 
-                // Chamar o método para imprimir os alunos em ordem na árvore
-
-                // Exibir os alunos na JTextArea
                 textArea.append(tree.imprimirEmOrdem());
 
             }
@@ -77,7 +69,6 @@ public class RegistrosAlunosGUI extends JFrame {
 
         insertButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Crie um JOptionPane para obter os dados do novo aluno
                 JTextField matriculaField = new JTextField();
                 JTextField nomeField = new JTextField();
                 JTextField faltasField = new JTextField();
@@ -97,22 +88,19 @@ public class RegistrosAlunosGUI extends JFrame {
                 int option = JOptionPane.showConfirmDialog(null, message, "Inserir Aluno",
                         JOptionPane.OK_CANCEL_OPTION);
 
-                // Se o usuário pressionou OK, prossiga com a inserção do aluno
                 if (option == JOptionPane.OK_OPTION) {
                     try {
                         int matricula = Integer.parseInt(matriculaField.getText());
-                        // Verifique se a matrícula está dentro do intervalo de 10 a 99
                         if (matricula < 10 || matricula > 99) {
                             JOptionPane.showMessageDialog(null, "A matrícula deve estar no intervalo de 10 a 99.",
                                     "Erro", JOptionPane.ERROR_MESSAGE);
-                            return; // Saia da inserção
+                            return; 
                         }
 
-                        // Verifique se a matrícula já existe
                         if (tree.verificarMatriculaExistente(matricula)) {
                             JOptionPane.showMessageDialog(null, "Esta matrícula já existe.", "Erro",
                                     JOptionPane.ERROR_MESSAGE);
-                            return; // Saia da inserção
+                            return; 
                         }
 
                         String nome = nomeField.getText();
@@ -124,10 +112,8 @@ public class RegistrosAlunosGUI extends JFrame {
                         Aluno aluno = new Aluno(matricula, nome, faltas, nota1, nota2, nota3);
                         tree.inserir(aluno);
 
-                        // Limpe a JTextArea
                         textArea.setText("");
 
-                        // Exibir os alunos atualizados na JTextArea
                         textArea.append(tree.imprimirEmOrdem());
 
                     } catch (NumberFormatException ex) {
@@ -141,20 +127,16 @@ public class RegistrosAlunosGUI extends JFrame {
 
         searchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Solicite a matrícula do aluno que deseja buscar
                 String matriculaInput = JOptionPane.showInputDialog(null, "Digite a matrícula do aluno:");
 
                 try {
                     int matriculaBusca = Integer.parseInt(matriculaInput);
 
-                    // Chame o método buscarAluno da sua classe AVLAluno
                     BuscaResultado resultadoBusca = tree.buscarAluno(matriculaBusca);
 
                     if (resultadoBusca.getAlunoEncontrado() != null) {
-                        // Se o aluno foi encontrado, exiba suas informações na JTextArea
                         textArea.setText(resultadoBusca.getAlunoEncontrado().toString());
                     } else {
-                        // Se o aluno não foi encontrado, exiba uma mensagem de erro
                         JOptionPane.showMessageDialog(null, resultadoBusca.getMensagem(), "Erro",
                                 JOptionPane.ERROR_MESSAGE);
                     }
@@ -167,18 +149,15 @@ public class RegistrosAlunosGUI extends JFrame {
 
         editButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Solicite a matrícula do aluno que deseja editar
                 String matriculaInput = JOptionPane.showInputDialog(null,
                         "Digite a matrícula do aluno que deseja editar:");
 
                 try {
                     int matriculaBusca = Integer.parseInt(matriculaInput);
 
-                    // Chame o método buscarAluno da sua classe AVLAluno
                     BuscaResultado resultadoBusca = tree.buscarAluno(matriculaBusca);
 
                     if (resultadoBusca.getAlunoEncontrado() != null) {
-                        // Se o aluno foi encontrado, exiba um novo diálogo para atualizar informações
                         Aluno alunoParaEditar = resultadoBusca.getAlunoEncontrado();
 
                         JTextField faltasField = new JTextField(String.valueOf(alunoParaEditar.getFaltas()));
@@ -196,30 +175,24 @@ public class RegistrosAlunosGUI extends JFrame {
                         int option = JOptionPane.showConfirmDialog(null, message, "Editar Aluno",
                                 JOptionPane.OK_CANCEL_OPTION);
 
-                        // Se o usuário pressionou OK, atualize as informações do aluno
                         if (option == JOptionPane.OK_OPTION) {
                             int novasFaltas = Integer.parseInt(faltasField.getText());
                             double novaNota1 = Double.parseDouble(nota1Field.getText());
                             double novaNota2 = Double.parseDouble(nota2Field.getText());
                             double novaNota3 = Double.parseDouble(nota3Field.getText());
 
-                            // Atualize as informações do aluno
                             alunoParaEditar.setFaltas(novasFaltas);
                             alunoParaEditar.setNota1(novaNota1);
                             alunoParaEditar.setNota2(novaNota2);
                             alunoParaEditar.setNota3(novaNota3);
 
-                            // Recalcule a média do aluno e atualize as informações na árvore AVL
                             tree.editarAluno(alunoParaEditar);
 
-                            // Limpe a JTextArea
                             textArea.setText("");
 
-                            // Exiba os alunos atualizados na JTextArea
                             textArea.append(tree.imprimirEmOrdem());
                         }
                     } else {
-                        // Se o aluno não foi encontrado, exiba uma mensagem de erro
                         JOptionPane.showMessageDialog(null, resultadoBusca.getMensagem(), "Erro",
                                 JOptionPane.ERROR_MESSAGE);
                     }
@@ -232,26 +205,20 @@ public class RegistrosAlunosGUI extends JFrame {
 
         removeButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                // Solicite a matrícula do aluno que deseja remover
                 String matriculaInput = JOptionPane.showInputDialog(null,
                         "Digite a matrícula do aluno que deseja remover:");
 
                 try {
                     int matricula = Integer.parseInt(matriculaInput);
 
-                    // Verificar se a matrícula existe na árvore
                     if (tree.verificarMatriculaExistente(matricula)) {
-                        // Remover o aluno da árvore
                         tree.removerAluno(matricula);
 
-                        // Atualizar a exibição da árvore na JTextArea após a remoção
-                        textArea.setText(""); // Limpa o texto anterior
-                        textArea.append(tree.imprimirEmOrdem()); // Atualiza com a nova árvore
+                        textArea.setText(""); 
+                        textArea.append(tree.imprimirEmOrdem()); 
 
-                        // Exibir uma mensagem de sucesso (opcional)
                         JOptionPane.showMessageDialog(null, "Aluno removido com sucesso!");
                     } else {
-                        // Exibir uma mensagem de erro se a matrícula não existir
                         JOptionPane.showMessageDialog(null, "Matrícula não encontrada. Verifique a matrícula inserida.",
                                 "Erro",
                                 JOptionPane.ERROR_MESSAGE);

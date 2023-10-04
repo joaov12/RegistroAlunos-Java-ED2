@@ -9,10 +9,8 @@ public class AVLAluno {
     Node raiz;
 
     private Node balancear(Node node) {
-        // Calcule o fator de equilíbrio do nó
         int balance = calcularBalance(node);
     
-        // Casos de rotação
         if (balance > 1) {
             if (calcularBalance(node.esquerda) >= 0)
                 return rotacaoDireita(node);
@@ -85,13 +83,12 @@ public class AVLAluno {
         else if (aluno.getMatricula() > node.aluno.getMatricula())
             node.direita = inserirRec(node.direita, aluno);
         else
-            return node; // Chaves duplicadas não são permitidas
+            return node; 
 
         node.altura = 1 + Math.max(altura(node.esquerda), altura(node.direita));
 
         int balance = calcularBalance(node);
 
-        // Casos de rotação
         if (balance > 1 && aluno.getMatricula() < node.esquerda.aluno.getMatricula())
             return rotacaoDireita(node);
 
@@ -128,11 +125,10 @@ public class AVLAluno {
             sb.append("Nota 2: ").append(aluno.getNota2()).append("\n");
             sb.append("Nota 3: ").append(aluno.getNota3()).append("\n");
 
-            // Calcule a média com o método calcularMedia() da classe Aluno
             double media = aluno.calcularMedia();
             sb.append("Média: ").append(String.format("%.2f", media)).append("\n");
 
-            sb.append("\n"); // Adicione uma linha em branco entre os alunos
+            sb.append("\n"); 
             imprimirEmOrdemRec(node.direita, sb);
         }
     }
@@ -190,21 +186,17 @@ public class AVLAluno {
         else if (aluno.getMatricula() > node.aluno.getMatricula())
             node.direita = editarAlunoRec(node.direita, aluno);
         else {
-            // Nó encontrado, realizar a edição
             node.aluno.setFaltas(aluno.getFaltas());
             node.aluno.setNota1(aluno.getNota1());
             node.aluno.setNota2(aluno.getNota2());
             node.aluno.setNota3(aluno.getNota3());
 
-            // Recalcular a média do aluno após a edição
             double novaMedia = (aluno.getNota1() * 0.2) + (aluno.getNota2() * 0.35) + (aluno.getNota3() * 0.45);
             node.aluno.setMedia(novaMedia);
 
-            // Atualizar a altura do nó após a edição
             node.altura = 1 + Math.max(altura(node.esquerda), altura(node.direita));
         }
 
-        // Balancear a árvore após a edição
         return balancear(node);
     }
 

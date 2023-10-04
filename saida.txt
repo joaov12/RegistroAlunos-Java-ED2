@@ -17,3 +17,4 @@ Matrícula: 77, Nome: Rafael, Faltas: 3, Nota1: 6.5, Nota2: 7.5, Nota3: 8.0, Mé
 Matrícula: 88, Nome: Laura, Faltas: 1, Nota1: 8.0, Nota2: 8.5, Nota3: 9.0, Média: 8,63
 Matrícula: 90, Nome: Thiago, Faltas: 4, Nota1: 5.5, Nota2: 6.0, Nota3: 7.0, Média: 6,35
 Matrícula: 98, Nome: João, Faltas: 2, Nota1: 7.5, Nota2: 8.0, Nota3: 9.0, Média: 8,35
+Matrícula: 99, Nome: Carlos, Faltas: 4, Nota1: 5.0, Nota2: 6.0, Nota3: 7.0, Média: 6,25
