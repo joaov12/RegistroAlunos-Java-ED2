@@ -86,7 +86,8 @@ public class Aluno {
 
     @Override
     public String toString() {
+        String mediaFormatada = String.format("%.2f", media);
         return "Matrícula: " + matricula + ", Nome: " + nome + ", Faltas: " + faltas + ", Nota1: " + nota1 + ", Nota2: "
-                + nota2 + ", Nota3: " + nota3 + ", Média: " + media;
+                + nota2 + ", Nota3: " + nota3 + ", Média: " + mediaFormatada;
     }
 }

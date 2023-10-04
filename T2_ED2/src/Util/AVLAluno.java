@@ -8,6 +8,32 @@ import Entities.Aluno;
 public class AVLAluno {
     Node raiz;
 
+    private Node balancear(Node node) {
+        // Calcule o fator de equilíbrio do nó
+        int balance = calcularBalance(node);
+    
+        // Casos de rotação
+        if (balance > 1) {
+            if (calcularBalance(node.esquerda) >= 0)
+                return rotacaoDireita(node);
+            else {
+                node.esquerda = rotacaoEsquerda(node.esquerda);
+                return rotacaoDireita(node);
+            }
+        }
+        if (balance < -1) {
+            if (calcularBalance(node.direita) <= 0)
+                return rotacaoEsquerda(node);
+            else {
+                node.direita = rotacaoDireita(node.direita);
+                return rotacaoEsquerda(node);
+            }
+        }
+    
+        return node;
+    }
+    
+
     private int altura(Node node) {
         if (node == null)
             return 0;
@@ -85,25 +111,57 @@ public class AVLAluno {
         return node;
     }
 
-    public void imprimirEmOrdem() {
-        imprimirEmOrdemRec(raiz);
+    public String imprimirEmOrdem() {
+        StringBuilder sb = new StringBuilder();
+        imprimirEmOrdemRec(raiz, sb);
+        return sb.toString();
     }
 
-    private void imprimirEmOrdemRec(Node node) {
+    private void imprimirEmOrdemRec(Node node, StringBuilder sb) {
         if (node != null) {
-            imprimirEmOrdemRec(node.esquerda);
-            System.out.println(node.aluno.toString());
-            imprimirEmOrdemRec(node.direita);
+            imprimirEmOrdemRec(node.esquerda, sb);
+            Aluno aluno = node.aluno;
+            sb.append("Matrícula: ").append(aluno.getMatricula()).append("\n");
+            sb.append("Nome: ").append(aluno.getNome()).append("\n");
+            sb.append("Faltas: ").append(aluno.getFaltas()).append("\n");
+            sb.append("Nota 1: ").append(aluno.getNota1()).append("\n");
+            sb.append("Nota 2: ").append(aluno.getNota2()).append("\n");
+            sb.append("Nota 3: ").append(aluno.getNota3()).append("\n");
+
+            // Calcule a média com o método calcularMedia() da classe Aluno
+            double media = aluno.calcularMedia();
+            sb.append("Média: ").append(String.format("%.2f", media)).append("\n");
+
+            sb.append("\n"); // Adicione uma linha em branco entre os alunos
+            imprimirEmOrdemRec(node.direita, sb);
         }
     }
 
-    public void buscarAluno(int matricula) {
+    public class BuscaResultado {
+        public Aluno alunoEncontrado;
+        public String mensagem;
+
+        public BuscaResultado(Aluno alunoEncontrado, String mensagem) {
+            this.alunoEncontrado = alunoEncontrado;
+            this.mensagem = mensagem;
+        }
+
+        public Aluno getAlunoEncontrado() {
+            return alunoEncontrado;
+        }
+
+        public String getMensagem() {
+            return mensagem;
+        }
+    }
+
+    public BuscaResultado buscarAluno(int matricula) {
         Aluno alunoEncontrado = buscarAlunoRec(raiz, matricula);
 
         if (alunoEncontrado != null) {
-            System.out.println(alunoEncontrado.toString());
+            return new BuscaResultado(alunoEncontrado, alunoEncontrado.toString());
         } else {
-            System.out.println("Aluno com a matrícula " + matricula + " não encontrado.");
+            return new BuscaResultado(null, "Aluno com a matrícula " + matricula + " não encontrado.");
         }
     }
 
@@ -119,33 +177,36 @@ public class AVLAluno {
             return buscarAlunoRec(node.direita, matricula);
     }
 
-    public void editarAluno(int matricula, int faltas, double nota1, double nota2, double nota3) {
-        editarAlunoRec(raiz, matricula, faltas, nota1, nota2, nota3);
+    public void editarAluno(Aluno aluno) {
+        raiz = editarAlunoRec(raiz, aluno);
     }
-    private void editarAlunoRec(Node node, int matricula, int faltas, double nota1, double nota2, double nota3) {
+
+    private Node editarAlunoRec(Node node, Aluno aluno) {
         if (node == null)
-            return;
-    
-        if (matricula < node.aluno.getMatricula())
-            editarAlunoRec(node.esquerda, matricula, faltas, nota1, nota2, nota3);
-        else if (matricula > node.aluno.getMatricula())
-            editarAlunoRec(node.direita, matricula, faltas, nota1, nota2, nota3);
+            return node;
+
+        if (aluno.getMatricula() < node.aluno.getMatricula())
+            node.esquerda = editarAlunoRec(node.esquerda, aluno);
+        else if (aluno.getMatricula() > node.aluno.getMatricula())
+            node.direita = editarAlunoRec(node.direita, aluno);
         else {
             // Nó encontrado, realizar a edição
-            node.aluno.setFaltas(faltas);
-            node.aluno.setNota1(nota1);
-            node.aluno.setNota2(nota2);
-            node.aluno.setNota3(nota3);
-    
-            // Atualizar a média do aluno após a edição
-            node.aluno.setMedia((nota1 * 0.2) + (nota2 * 0.35) + (nota3 * 0.45));
-    
+            node.aluno.setFaltas(aluno.getFaltas());
+            node.aluno.setNota1(aluno.getNota1());
+            node.aluno.setNota2(aluno.getNota2());
+            node.aluno.setNota3(aluno.getNota3());
+
+            // Recalcular a média do aluno após a edição
+            double novaMedia = (aluno.getNota1() * 0.2) + (aluno.getNota2() * 0.35) + (aluno.getNota3() * 0.45);
+            node.aluno.setMedia(novaMedia);
+
             // Atualizar a altura do nó após a edição
             node.altura = 1 + Math.max(altura(node.esquerda), altura(node.direita));
         }
+
+        // Balancear a árvore após a edição
+        return balancear(node);
     }
-    
-    
 
     public void removerAluno(int matricula) {
         raiz = removerAlunoRec(raiz, matricula);
@@ -169,8 +230,8 @@ public class AVLAluno {
                 if (temp == null) {
                     temp = node;
                     node = null;
-                } else 
-                    node = temp; 
+                } else
+                    node = temp;
             } else {
                 Node temp = minNode(node.direita);
 
@@ -179,7 +240,7 @@ public class AVLAluno {
                 node.direita = removerAlunoRec(node.direita, temp.aluno.getMatricula());
             }
         }
-        
+
         if (node == null)
             return node;
 
@@ -187,7 +248,6 @@ public class AVLAluno {
 
         int balance = calcularBalance(node);
 
-       
         if (balance > 1 && calcularBalance(node.esquerda) >= 0)
             return rotacaoDireita(node);
 
