@@ -22,8 +22,8 @@ public class RegistrosAlunosGUI extends JFrame {
     public JTextArea textArea;
 
     public RegistrosAlunosGUI() {
-
         setExtendedState(JFrame.MAXIMIZED_BOTH);
+
 
         tree = new AVLAluno();
         textArea = new JTextArea(20, 40);
@@ -261,6 +261,7 @@ public class RegistrosAlunosGUI extends JFrame {
             public void run() {
                 RegistrosAlunosGUI gui = new RegistrosAlunosGUI();
                 gui.setVisible(true);
+                gui.setExtendedState(JFrame.MAXIMIZED_BOTH);
             }
         });
     }
