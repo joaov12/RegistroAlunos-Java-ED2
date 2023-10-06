@@ -58,7 +58,7 @@ public class RegistrosAlunosGUI extends JFrame {
                     e.printStackTrace();
                 }
 
-                Font font = new Font("SansSerif", Font.PLAIN, 16); 
+                Font font = new Font("SansSerif", Font.PLAIN, 24); 
                 textArea.setFont(font);
                 textArea.setText("");
 

@@ -128,6 +128,8 @@ public class AVLAluno {
             double media = aluno.calcularMedia();
             sb.append("Média: ").append(String.format("%.2f", media)).append("\n");
 
+            sb.append("---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+
             sb.append("\n"); 
             imprimirEmOrdemRec(node.direita, sb);
         }
