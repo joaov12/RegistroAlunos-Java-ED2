@@ -32,7 +32,7 @@ public class RegistrosAlunosGUI extends JFrame {
         JButton viewButton = new JButton("Ver Todos Alunos");
         JButton insertButton = new JButton("Inserir Aluno");
         JButton searchButton = new JButton("Buscar Aluno");
-        JButton editButton = new JButton("Editar Aluno");
+        JButton editButton = new JButton("Atribuir notas ou faltas");
         JButton removeButton = new JButton("Remover Aluno");
         JButton exitButton = new JButton("Sair");
 
@@ -233,9 +233,11 @@ public class RegistrosAlunosGUI extends JFrame {
         exitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 tree.gravarEmOrdem("saida.txt");
+                JOptionPane.showMessageDialog(null, "Saindo...\nOs dados foram salvos com sucesso!\nVeja as alterações no arquivo saida.txt", "Dados Salvos", JOptionPane.INFORMATION_MESSAGE);
                 System.exit(0);
             }
         });
+        
 
         JPanel buttonPanel = new JPanel(new GridLayout(6, 1));
         buttonPanel.add(viewButton);
